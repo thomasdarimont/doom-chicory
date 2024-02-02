@@ -12,7 +12,7 @@ public class GameWindow extends JFrame {
     private final DoomKeyListener keyListener = new DoomKeyListener();
 
     public GameWindow() throws HeadlessException {
-        super("Doom on GraalVM");
+        super("Doom on Chicory");
 
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         setLocationByPlatform(true);
