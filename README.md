@@ -1,7 +1,9 @@
 
 # WIP
 
-Attempt to port https://github.com/stepstone-tech/doom-graalvm to Chicory
+Attempt to port https://github.com/stepstone-tech/doom-graalvm to Chicory.
+It seems to work with those small changes:
+https://github.com/dylibso/chicory/commit/a8c897558fdd73a99d43ca9bf1c0e54016fe5c03 
 
 Previous Readme:
 

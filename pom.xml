@@ -13,16 +13,15 @@
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <maven.compiler.target>${java.version}</maven.compiler.target>
         <maven.compiler.source>${java.version}</maven.compiler.source>
-        <java.version>19</java.version>
-        <graalvm.version>22.3.0</graalvm.version>
+        <java.version>17</java.version>
+        <chicory.version>999-SNAPSHOT</chicory.version>
     </properties>
 
     <dependencies>
         <dependency>
-            <groupId>org.graalvm.sdk</groupId>
-            <artifactId>graal-sdk</artifactId>
-            <version>${graalvm.version}</version>
-            <scope>provided</scope>
+            <groupId>com.dylibso.chicory</groupId>
+            <artifactId>runtime</artifactId>
+            <version>${chicory.version}</version>
         </dependency>
     </dependencies>
 
