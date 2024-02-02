@@ -1,4 +1,10 @@
 
+# WIP
+
+Attempt to port https://github.com/stepstone-tech/doom-graalvm to Chicory
+
+Previous Readme:
+
 At [Stepstone](https://www.stepstone.com), as part of our internal brown bag session, we talked about [polyglot capabilities of GraalVM](https://www.graalvm.org/latest/reference-manual/languages/). 
 We know, that GraalVM can run javascript, python, llvm and especially WebAssembly. But...
 >  **Can it run Doom? :suspect:**
