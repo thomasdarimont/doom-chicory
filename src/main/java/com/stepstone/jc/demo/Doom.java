@@ -29,8 +29,6 @@ public class Doom {
     static int doomScreenWidth = 640;
     static int doomScreenHeight = 400;
     static String JS_MODULE_NAME = "js";
-
-    static String ENV_MODULE_NAME = "env";
     private final ScheduledExecutorService scheduledExecutorService = Executors.newScheduledThreadPool(1);
     private final GameWindow gameWindow = new GameWindow();
 
