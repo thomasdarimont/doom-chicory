@@ -158,7 +158,6 @@ public class Doom {
 
             int max = Doom.doomScreenWidth * Doom.doomScreenHeight * 4;
             int[] screenData = new int[max];
-            System.out.print("drawing - ");
             for (int i = 0; i < max; i++) {
                 byte pixelComponent = instance.memory().read(i + ptr);
                 screenData[i] = pixelComponent;
@@ -166,7 +165,6 @@ public class Doom {
             BufferedImage bufferedImage = new BufferedImage(Doom.doomScreenWidth, Doom.doomScreenHeight, TYPE_4BYTE_ABGR);
             bufferedImage.getRaster().setPixels(0, 0, Doom.doomScreenWidth, Doom.doomScreenHeight, screenData);
             gameWindow.drawImage(bufferedImage);
-            System.out.println("done");
 
             return null;
         };
