@@ -1,15 +1,21 @@
 
-# WIP - Doom on Chicory
+# Doom on Chicory
 
-Attempt to port https://github.com/stepstone-tech/doom-graalvm to Chicory.
-
-It seems to work with those small changes:
-https://github.com/dylibso/chicory/commit/a8c897558fdd73a99d43ca9bf1c0e54016fe5c03
+Port of https://github.com/stepstone-tech/doom-graalvm to Chicory.
 
 ![Game window](doom_chicory.png "Game window")
 
+Build with:
 
-Previous Readme:
+`mvn clean package`
+
+Run with:
+
+`java -jar ./target/doom-wasm-1.0-SNAPSHOT-jar-with-dependencies.jar`
+
+The game is running flaky and slowly, but works!
+
+Original Readme:
 
 At [Stepstone](https://www.stepstone.com), as part of our internal brown bag session, we talked about [polyglot capabilities of GraalVM](https://www.graalvm.org/latest/reference-manual/languages/). 
 We know, that GraalVM can run javascript, python, llvm and especially WebAssembly. But...
