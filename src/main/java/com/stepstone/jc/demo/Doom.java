@@ -86,7 +86,7 @@ public class Doom {
                 },
                 new HostTable[]{}
         );
-        var instance = module.instantiate(imports);
+        var instance = module.withHostImports(imports).instantiate();
 
         var addBrowserEvent = instance.export("add_browser_event");
         var doomLoopStep = instance.export("doom_loop_step");
