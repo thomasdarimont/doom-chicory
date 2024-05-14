@@ -5,7 +5,11 @@ Port of https://github.com/stepstone-tech/doom-graalvm to Chicory.
 
 ![Game window](doom_chicory.png "Game window")
 
-Build with:
+If you have `jbang` installed you can directly run it:
+
+`jbang --repos jitpack com.github.andreaTP:doom-chicory:main-SNAPSHOT`
+
+Build locally with:
 
 `mvn clean package`
 
@@ -13,7 +17,7 @@ Run with:
 
 `java -Xss4m -jar ./target/doom-wasm-1.0-SNAPSHOT-jar-with-dependencies.jar`
 
-The game is running flaky and slowly, but works!
+The game is a bit flaky, but works!
 
 Original Readme:
 
