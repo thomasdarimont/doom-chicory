@@ -11,7 +11,7 @@ Build with:
 
 Run with:
 
-`java -jar ./target/doom-wasm-1.0-SNAPSHOT-jar-with-dependencies.jar`
+`java -Xss4m -jar ./target/doom-wasm-1.0-SNAPSHOT-jar-with-dependencies.jar`
 
 The game is running flaky and slowly, but works!
 
