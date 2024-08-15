@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.stepstone.jc</groupId>
-    <artifactId>doom-wasm</artifactId>
+    <artifactId>doom-chicory</artifactId>
     <version>1.0-SNAPSHOT</version>
 
     <properties>
@@ -14,13 +14,18 @@
         <maven.compiler.target>${java.version}</maven.compiler.target>
         <maven.compiler.source>${java.version}</maven.compiler.source>
         <java.version>17</java.version>
-        <chicory.version>0.0.8</chicory.version>
+        <chicory.version>0.0.12</chicory.version>
     </properties>
 
     <dependencies>
         <dependency>
             <groupId>com.dylibso.chicory</groupId>
             <artifactId>runtime</artifactId>
+            <version>${chicory.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.dylibso.chicory</groupId>
+            <artifactId>aot</artifactId>
             <version>${chicory.version}</version>
         </dependency>
     </dependencies>

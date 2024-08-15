@@ -35,7 +35,7 @@ From IDE - just run `com.stepstone.jc.demo.Doom` class
 
 From the command line - compile with `mvn package` and then run with:
 ```bash
-java -Xss4m -jar doom-wasm-1.0-SNAPSHOT-jar-with-dependencies.jar
+java -Xss4m -jar target/doom-*-jar-with-dependencies.jar
 ```
 
 After this, you should see a Java Swing window **and you can start killing monsters :godmode:**

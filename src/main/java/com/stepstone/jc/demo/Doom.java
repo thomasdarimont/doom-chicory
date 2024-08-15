@@ -1,5 +1,6 @@
 package com.stepstone.jc.demo;
 
+import com.dylibso.chicory.aot.AotMachine;
 import com.dylibso.chicory.runtime.HostFunction;
 import com.dylibso.chicory.runtime.HostGlobal;
 import com.dylibso.chicory.runtime.HostImports;
@@ -38,9 +39,6 @@ public class Doom {
 
     void runGame() throws IOException {
         EventQueue.invokeLater(() -> gameWindow.setVisible(true));
-
-        // load WASM module
-        var module = Module.builder("doom.wasm").build();
 
         //        import function js_js_milliseconds_since_start():int;
         //        import function js_js_console_log(a:int, b:int);
@@ -86,7 +84,13 @@ public class Doom {
                 },
                 new HostTable[]{}
         );
-        var instance = module.instantiate(imports);
+
+        // load WASM module
+        var module = Module.builder("doom.wasm")
+                .withHostImports(imports)
+                .withMachineFactory(AotMachine::new)
+                .build();
+        var instance = module.instantiate();
 
         var addBrowserEvent = instance.export("add_browser_event");
         var doomLoopStep = instance.export("doom_loop_step");
