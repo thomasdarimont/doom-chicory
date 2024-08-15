@@ -15,6 +15,10 @@ Run with:
 
 The game is running flaky and slowly, but works!
 
+You can also enable the new AOT (Ahead of time bytecode compilation support) via `-Dchicory.aot=true`
+
+`java -Dchicory.aot=true -jar ./target/doom-wasm-1.0-SNAPSHOT-jar-with-dependencies.jar`
+
 Original Readme:
 
 At [Stepstone](https://www.stepstone.com), as part of our internal brown bag session, we talked about [polyglot capabilities of GraalVM](https://www.graalvm.org/latest/reference-manual/languages/). 

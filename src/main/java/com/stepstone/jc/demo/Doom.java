@@ -86,10 +86,11 @@ public class Doom {
         );
 
         // load WASM module
-        var module = Module.builder("doom.wasm")
-                .withHostImports(imports)
-                .withMachineFactory(AotMachine::new)
-                .build();
+        Module.Builder builder = Module.builder("doom.wasm").withHostImports(imports);
+        if (Boolean.getBoolean("chicory.aot")) {
+            builder = builder.withMachineFactory(AotMachine::new);
+        }
+        var module = builder.build();
         var instance = module.instantiate();
 
         var addBrowserEvent = instance.export("add_browser_event");
