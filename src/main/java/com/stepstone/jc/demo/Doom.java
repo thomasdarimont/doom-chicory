@@ -16,9 +16,6 @@ import com.dylibso.chicory.wasm.types.ValueType;
 
 import java.awt.EventQueue;
 import java.awt.image.BufferedImage;
-import java.io.IOException;
-import java.nio.ByteBuffer;
-import java.nio.ByteOrder;
 import java.util.List;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -33,11 +30,11 @@ public class Doom {
     private final ScheduledExecutorService scheduledExecutorService = Executors.newScheduledThreadPool(1);
     private final GameWindow gameWindow = new GameWindow();
 
-    public static void main(String[] args) throws Exception {
-       new Doom().runGame();
+    public static void main(String[] args) {
+        new Doom().runGame();
     }
 
-    void runGame() throws IOException {
+    void runGame() {
         EventQueue.invokeLater(() -> gameWindow.setVisible(true));
 
         //        import function js_js_milliseconds_since_start():int;
@@ -97,14 +94,14 @@ public class Doom {
         var doomLoopStep = instance.export("doom_loop_step");
         var main = instance.export("main");
 
-        // run main() with doommy argc,argv pointers to set up some variables
+        // run main() with doom argc,argv pointers to set up some variables
         main.apply(Value.i32(0), Value.i32(0));
 
         // schedule main game loop
         scheduledExecutorService.scheduleAtFixedRate(() -> {
             gameWindow.drainKeyEvents(event -> addBrowserEvent.apply(Value.i32(event[0]), Value.i32(event[1])));
             doomLoopStep.apply();
-        }, 0, 10, TimeUnit.MILLISECONDS);
+        }, 0, 5, TimeUnit.MILLISECONDS);
     }
 
     private final long start = System.currentTimeMillis();
@@ -115,12 +112,11 @@ public class Doom {
      * @return milliseconds from start of game
      */
     private WasmFunctionHandle jsMillisecondsSinceStart() {
-        return (Instance instance, Value ... args) -> {
-            return new Value[] { Value.i32((int) (System.currentTimeMillis() - start)) };
-        };
+        return (Instance instance, Value... args) -> new Value[]{Value.i32((int) (System.currentTimeMillis() - start))};
     }
+
     private WasmFunctionHandle jsConsoleLog() {
-        return (Instance instance, Value ... args) -> {
+        return (Instance instance, Value... args) -> {
             var offset = args[0].asInt();
             var size = args[1].asInt();
 
@@ -129,8 +125,9 @@ public class Doom {
             return null;
         };
     }
+
     private WasmFunctionHandle jsStdout() {
-        return (Instance instance, Value ... args) -> {
+        return (Instance instance, Value... args) -> {
             var offset = args[0].asInt();
             var size = args[1].asInt();
 
@@ -139,8 +136,9 @@ public class Doom {
             return null;
         };
     }
+
     private WasmFunctionHandle jsStderr() {
-        return (Instance instance, Value ... args) -> {
+        return (Instance instance, Value... args) -> {
             var offset = args[0].asInt();
             var size = args[1].asInt();
 
@@ -153,10 +151,9 @@ public class Doom {
     /**
      * Called when game draws to screen.
      * Fortunately doom screen buffer can be copied directly into {@link BufferedImage} buffer
-     *
      */
     private WasmFunctionHandle jsDrawScreen() {
-        return (Instance instance, Value ... args) -> {
+        return (Instance instance, Value... args) -> {
             var ptr = args[0].asInt();
 
             int max = Doom.doomScreenWidth * Doom.doomScreenHeight * 4;

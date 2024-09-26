@@ -24,6 +24,10 @@ class DoomKeyListener extends KeyAdapter {
     }
 
     synchronized public void drainEvents(Consumer<int[]> action) {
+        if (keyEvents.isEmpty()) {
+            return;
+        }
+        System.out.println("Process events");
         keyEvents.forEach(action);
         keyEvents.clear();
     }

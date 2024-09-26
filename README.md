@@ -11,13 +11,13 @@ Build with:
 
 Run with:
 
-`java -jar ./target/doom-wasm-1.0-SNAPSHOT-jar-with-dependencies.jar`
+`java -jar ./target/doom-*-SNAPSHOT-jar-with-dependencies.jar`
 
 The game is running flaky and slowly, but works!
 
 You can also enable the new AOT (Ahead of time bytecode compilation support) via `-Dchicory.aot=true`
 
-`java -Dchicory.aot=true -jar ./target/doom-wasm-1.0-SNAPSHOT-jar-with-dependencies.jar`
+`java -Dchicory.aot=true -jar ./target/doom-*-SNAPSHOT-jar-with-dependencies.jar`
 
 Original Readme:
 
