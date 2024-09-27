@@ -24,9 +24,11 @@ import java.util.concurrent.TimeUnit;
 import static java.awt.image.BufferedImage.TYPE_4BYTE_ABGR;
 
 public class Doom {
-    static int doomScreenWidth = 640;
-    static int doomScreenHeight = 400;
-    static String JS_MODULE_NAME = "js";
+
+    static final int DOOM_SCREEN_WIDTH = 640;
+    static final int DOOM_SCREEN_HEIGHT = 400;
+    static final String JS_MODULE_NAME = "js";
+
     private final ScheduledExecutorService scheduledExecutorService = Executors.newScheduledThreadPool(1);
     private final GameWindow gameWindow = new GameWindow();
 
@@ -37,12 +39,39 @@ public class Doom {
     void runGame() {
         EventQueue.invokeLater(() -> gameWindow.setVisible(true));
 
+        // load WASM module
+        Module.Builder builder = Module
+                .builder("doom.wasm")
+                .withHostImports(exposeHostFunctions());
+
+        if (Boolean.getBoolean("chicory.aot")) {
+            builder = builder.withMachineFactory(AotMachine::new);
+        }
+
+        var module = builder.build();
+        var instance = module.instantiate();
+
+        var addBrowserEvent = instance.export("add_browser_event");
+        var doomLoopStep = instance.export("doom_loop_step");
+        var main = instance.export("main");
+
+        // run main() with doom argc,argv pointers to set up some variables
+        main.apply(Value.i32(0), Value.i32(0));
+
+        // schedule main game loop
+        scheduledExecutorService.scheduleAtFixedRate(() -> {
+            gameWindow.drainKeyEvents(event -> addBrowserEvent.apply(Value.i32(event[0]), Value.i32(event[1])));
+            doomLoopStep.apply();
+        }, 0, 5, TimeUnit.MILLISECONDS);
+    }
+
+    private HostImports exposeHostFunctions() {
         //        import function js_js_milliseconds_since_start():int;
         //        import function js_js_console_log(a:int, b:int);
         //        import function js_js_draw_screen(a:int);
         //        import function js_js_stdout(a:int, b:int);
         //        import function js_js_stderr(a:int, b:int);
-        var imports = new HostImports(
+        return new HostImports(
                 new HostFunction[]{
                         new HostFunction(
                                 jsMillisecondsSinceStart(),
@@ -81,27 +110,6 @@ public class Doom {
                 },
                 new HostTable[]{}
         );
-
-        // load WASM module
-        Module.Builder builder = Module.builder("doom.wasm").withHostImports(imports);
-        if (Boolean.getBoolean("chicory.aot")) {
-            builder = builder.withMachineFactory(AotMachine::new);
-        }
-        var module = builder.build();
-        var instance = module.instantiate();
-
-        var addBrowserEvent = instance.export("add_browser_event");
-        var doomLoopStep = instance.export("doom_loop_step");
-        var main = instance.export("main");
-
-        // run main() with doom argc,argv pointers to set up some variables
-        main.apply(Value.i32(0), Value.i32(0));
-
-        // schedule main game loop
-        scheduledExecutorService.scheduleAtFixedRate(() -> {
-            gameWindow.drainKeyEvents(event -> addBrowserEvent.apply(Value.i32(event[0]), Value.i32(event[1])));
-            doomLoopStep.apply();
-        }, 0, 5, TimeUnit.MILLISECONDS);
     }
 
     private final long start = System.currentTimeMillis();
@@ -115,6 +123,10 @@ public class Doom {
         return (Instance instance, Value... args) -> new Value[]{Value.i32((int) (System.currentTimeMillis() - start))};
     }
 
+    /**
+     * Redirect console.log to stdout
+     * @return
+     */
     private WasmFunctionHandle jsConsoleLog() {
         return (Instance instance, Value... args) -> {
             var offset = args[0].asInt();
@@ -156,14 +168,14 @@ public class Doom {
         return (Instance instance, Value... args) -> {
             var ptr = args[0].asInt();
 
-            int max = Doom.doomScreenWidth * Doom.doomScreenHeight * 4;
+            int max = Doom.DOOM_SCREEN_WIDTH * Doom.DOOM_SCREEN_HEIGHT * 4;
             int[] screenData = new int[max];
             for (int i = 0; i < max; i++) {
                 byte pixelComponent = instance.memory().read(i + ptr);
                 screenData[i] = pixelComponent;
             }
-            BufferedImage bufferedImage = new BufferedImage(Doom.doomScreenWidth, Doom.doomScreenHeight, TYPE_4BYTE_ABGR);
-            bufferedImage.getRaster().setPixels(0, 0, Doom.doomScreenWidth, Doom.doomScreenHeight, screenData);
+            BufferedImage bufferedImage = new BufferedImage(Doom.DOOM_SCREEN_WIDTH, Doom.DOOM_SCREEN_HEIGHT, TYPE_4BYTE_ABGR);
+            bufferedImage.getRaster().setPixels(0, 0, Doom.DOOM_SCREEN_WIDTH, Doom.DOOM_SCREEN_HEIGHT, screenData);
             gameWindow.drawImage(bufferedImage);
 
             return null;

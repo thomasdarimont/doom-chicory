@@ -11,10 +11,14 @@ import java.util.function.Consumer;
  * See {@link DoomWASM#add_browser_event(int, int)}
  */
 class DoomKeyListener extends KeyAdapter {
+
     private final Queue<int[]> keyEvents = new LinkedList<>();
 
     @Override
     public void keyPressed(KeyEvent e) {
+        if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
+            System.exit(0);
+        }
         keyEvents.add(new int[]{0, toDoomKeyCode(e.getKeyCode())});
     }
 
@@ -27,7 +31,6 @@ class DoomKeyListener extends KeyAdapter {
         if (keyEvents.isEmpty()) {
             return;
         }
-        System.out.println("Process events");
         keyEvents.forEach(action);
         keyEvents.clear();
     }
